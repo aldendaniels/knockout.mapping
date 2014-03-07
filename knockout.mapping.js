@@ -12,7 +12,6 @@
         factory(ko, ko.mapping = {});
     }
 }(function (ko, exports) {
-    var DEBUG=true;
     var mappingProperty = "__ko_mapping__";
     var realKoDependentObservable = ko.dependentObservable;
     var mappingNesting = 0;
@@ -287,7 +286,6 @@
                     },
                     deferEvaluation: true
                 });
-                if (DEBUG) wrapped._wrapper = true;
                 wrapped.__DO = DO;
                 return wrapped;
             };
