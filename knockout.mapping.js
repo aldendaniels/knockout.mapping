@@ -145,7 +145,7 @@
 
     exports.fromJSON = function (jsonString /*, options, target*/ ) {
         var parsed = ko.utils.parseJson(jsonString);
-        var argArray = Array.prototype.call(arguments);
+        var argArray = Array.prototype.slice.call(arguments);
         argArray[0] = parsed;
         return exports.fromJS.apply(this, argArray);
     };
