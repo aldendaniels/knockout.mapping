@@ -1,0 +1,23 @@
+{
+  "name": "knockout.mapping",
+  "version": "2.4.2",
+  "description": "Object mapping plugin for KnockoutJS",
+  "main": "knockout.mapping.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/derekpeterson/knockout.mapping.git"
+  },
+  "keywords": [
+    "knockout",
+    "mapping",
+    "plugin"
+  ],
+  "author": "Steven Sanderson",
+  "contributors": [
+    "Derek Peterson <derekptey@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/derekpeterson/knockout.mapping/issues"
+  }
+}
