@@ -3,9 +3,6 @@
   "version": "2.4.2",
   "description": "Object mapping plugin for KnockoutJS",
   "main": "knockout.mapping.js",
-  "dependencies": {
-    "knockout": "~3"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/derekpeterson/knockout.mapping.git"
