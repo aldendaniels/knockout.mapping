@@ -1,0 +1,29 @@
+{
+  "name": "knockout.mapping",
+  "main": "knockout.mapping.js",
+  "version": "2.4.2",
+  "homepage": "https://github.com/derekpeterson/knockout.mapping",
+  "description": "Object mapping plugin for Knockout",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "knockout",
+    "mapping",
+    "knockoutjs"
+  ],
+  "authors": [
+    "Steven Sanderson",
+    "Derek Peterson"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
