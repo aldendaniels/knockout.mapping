@@ -24,7 +24,7 @@ var generateProxyTests = function(useComputed) {
 					create: function(options) {
 						createOptions = createOptions || {};
 						var mapped = ko.mapping.fromJS(options.data, mapping);
-						
+
 						var DOdata = function() {
 							test.evaluationCount++;
 							return "test";
@@ -47,12 +47,12 @@ var generateProxyTests = function(useComputed) {
 								deferEvaluation: !!createOptions.deferEvaluation
 							});
 						}
-						
+
 						return mapped;
 					}
 				}
 			};
-			
+
 			return ko.mapping.fromJS(obj, mapping);
 		};
 	};
@@ -62,9 +62,9 @@ var generateProxyTests = function(useComputed) {
 			a: { a1: "a1" },
 			b: { b1: "b1" }
 		}
-		
+
 		var dependencyInvocations = [];
-		
+
 		var result = ko.mapping.fromJS(obj, {
 			a: {
 				create: function(options) {
@@ -89,7 +89,7 @@ var generateProxyTests = function(useComputed) {
 				},
 			}
 		});
-		
+
 		equal("b1", result.a.observeB());
 		equal("a1", result.b.observeA());
 	});
@@ -99,9 +99,9 @@ var generateProxyTests = function(useComputed) {
 			a: { a1: "a1" },
 			b: { b1: "b1" }
 		}
-		
+
 		var dependencyInvocations = [];
-		
+
 		var result = ko.mapping.fromJS(obj, {
 			a: {
 				create: function(options) {
@@ -136,10 +136,10 @@ var generateProxyTests = function(useComputed) {
 				},
 			}
 		});
-		
+
 		equal(result.a.observeB(), "b1");
 		equal(result.b.observeA(), "a1");
-		
+
 		result.a.observeB("b2");
 		result.b.observeA("a2");
 		equal(result.a.observeB(), "b2");
@@ -153,9 +153,9 @@ var generateProxyTests = function(useComputed) {
 				{ id: "b" }
 			]
 		}
-		
+
 		var dependencyInvocations = 0;
-		
+
 		var result = ko.mapping.fromJS(obj, {
 			"items": {
 				create: function(options) {
@@ -169,24 +169,24 @@ var generateProxyTests = function(useComputed) {
 				}
 			}
 		});
-		
+
 		equal(result.items()[0].observeParent(), 2);
 		equal(result.items()[1].observeParent(), 2);
 	});
 
 	test('dependentObservables with a write callback are passed through', function() {
 		var mapped = test.create({ useWriteCallback: true });
-		
+
 		mapped.a.DO("hello");
 		equal(test.written, "hello");
 		equal(test.writeEvaluationCount, 1);
 	});
-	
+
 	asyncTest('throttleEvaluation is correctly applied', function() {
 		var obj = {
 			a: "hello"
 		};
-	
+
 		var dependency = ko.observable(0);
 		var mapped = ko.mapping.fromJS(obj, {
 			a: {
@@ -200,22 +200,22 @@ var generateProxyTests = function(useComputed) {
 				}
 			}
 		});
-		
+
 		// Even though the dependency updates many times, it should be throttled to only one update
 		dependency.valueHasMutated();
 		dependency.valueHasMutated();
 		dependency.valueHasMutated();
 		dependency.valueHasMutated();
-		
+
 		window.setTimeout(function() {
 			start();
 			equal(mapped.a(), 1);
 		}, 1);
 	});
-	
+
 	test('dependentObservables without a write callback do not get a write callback', function() {
 		var mapped = test.create({ useWriteCallback: false });
-		
+
 		var caught = false;
 		try {
 			mapped.a.DO("hello");
@@ -224,7 +224,7 @@ var generateProxyTests = function(useComputed) {
 		}
 		equal(caught, true);
 	});
-	
+
 	asyncTest('undeferred dependentObservables that are NOT used immediately SHOULD be auto-evaluated after mapping', function() {
 		var mapped = test.create();
 		window.setTimeout(function() {
@@ -295,9 +295,9 @@ var generateProxyTests = function(useComputed) {
 					var mappedB = ko.mapping.fromJS(options.data, {
 						create: function(options) {
 							//In KO writable computed observables have to be backed by an observable
-							//otherwise they won't be notified they need updating. see: http://jsfiddle.net/drdamour/9Pz4m/ 
+							//otherwise they won't be notified they need updating. see: http://jsfiddle.net/drdamour/9Pz4m/
 							var DOval = ko.observable(undefined);
-							
+
 							var m = {};
 							m.myValue = ko.observable("myValue");
 							m.DO = func({
@@ -321,14 +321,14 @@ var generateProxyTests = function(useComputed) {
 				}
 			}
 		};
-		
+
 		var mapped = ko.mapping.fromJS(obj, mapping);
 		mapped.a.DO("bob");
 		equal(ko.utils.unwrapObservable(mapped.a.readOnlyDO), "myValue");
 		equal(ko.utils.unwrapObservable(mapped.a.DO), "bob");
 		equal(DOsubscribedVal, "bob");
 	});
-	
+
 
 	test('dependentObservable dependencies trigger subscribers', function() {
 		var obj = {
@@ -336,11 +336,11 @@ var generateProxyTests = function(useComputed) {
 				dependency: 1
 			}
 		};
-		
+
 		var inner = function(data) {
 			var _this = this;
 			ko.mapping.fromJS(data, {}, _this);
-			
+
 			_this.DO = func(function() {
 				_this.dependency();
 			});
@@ -350,7 +350,7 @@ var generateProxyTests = function(useComputed) {
 				_this.evaluationCount++;
 			});
 		};
-		
+
 		var mapping = {
 			inner: {
 				create: function(options) {
@@ -358,14 +358,14 @@ var generateProxyTests = function(useComputed) {
 				}
 			}
 		};
-		
+
 		var mapped = ko.mapping.fromJS(obj, mapping);
 		var i = mapped.inner;
 		equal(i.evaluationCount, 1); //it's evaluated once prior to fromJS returning
 
 		// change the dependency
 		i.dependency(2);
-			
+
 		// should also have re-evaluated
 		equal(i.evaluationCount, 2);
 	});
@@ -377,7 +377,7 @@ var generateProxyTests = function(useComputed) {
 			a: { name: "a" },
   			b: { name: "b" }
 		};
-		
+
 		var MyClassA = function(data, parent) {
 			var _this = this;
 
@@ -385,7 +385,7 @@ var generateProxyTests = function(useComputed) {
 
 			_this.DO = func(function() {
 				//Depends on b, which may not be there yet
-				return _this.name() + parent.b.name(); 
+				return _this.name() + parent.b.name();
 			});
 		};
 
@@ -396,7 +396,7 @@ var generateProxyTests = function(useComputed) {
 
 			_this.DO = func(function() {
 				//depends on a, which may not be there yet
-				return _this.name() + parent.a.name(); 
+				return _this.name() + parent.a.name();
 			});
 		};
 
@@ -415,14 +415,14 @@ var generateProxyTests = function(useComputed) {
 		}
 
 
-		
+
 		var mappedVM = ko.mapping.fromJS(model, mapping);
 
 
 		equal(mappedVM.a.DO(), "ab");
 		equal(mappedVM.b.DO(), "ba");
 	});
-	
+
 	test('dependentObservable mappingNesting is reset after exception', function() {
 		var model = {
 			a: { name: "a" }
@@ -436,7 +436,7 @@ var generateProxyTests = function(useComputed) {
     		return this.message;
   		};
 
-		throws( 
+		throws(
 			function()
 			{
 				ko.mapping.fromJS(model, {
@@ -455,11 +455,11 @@ var generateProxyTests = function(useComputed) {
 				dependency: 1
 			}
 		};
-		
+
 		var inner = function(data) {
 			var _this = this;
 			ko.mapping.fromJS(data, {}, _this);
-			
+
 			_this.DO = func(function() {
 				_this.dependency();
 			});
@@ -469,7 +469,7 @@ var generateProxyTests = function(useComputed) {
 				_this.evaluationCount++;
 			});
 		};
-		
+
 		var mapping = {
 			inner: {
 				create: function(options) {
@@ -477,7 +477,7 @@ var generateProxyTests = function(useComputed) {
 				}
 			}
 		};
-		
+
 		var mapped = ko.mapping.fromJS(obj, mapping);
 		var i = mapped.inner;
 		equal(i.evaluationCount, 1); //it's evaluated once prior to fromJS returning
@@ -486,15 +486,15 @@ var generateProxyTests = function(useComputed) {
 
 	test('dependentObservable evaluation for nested is defferred until after mapping takes place', function() {
 		var model = {
-			a: { 
-				name: "a", 
-  				c : {name: "c"} //nested 
+			a: {
+				name: "a",
+  				c : {name: "c"} //nested
 			},
-  			b: { 
+  			b: {
   				name: "b"
   			}
 		};
-		
+
 		var MyClassA = function(data, parent) {
 			var _this = this;
 
@@ -510,7 +510,7 @@ var generateProxyTests = function(useComputed) {
 
 			_this.DO = func(function() {
 				//Depends on b, which may not be there yet
-				return _this.name() + parent.b.name(); 
+				return _this.name() + parent.b.name();
 			});
 		};
 
@@ -521,7 +521,7 @@ var generateProxyTests = function(useComputed) {
 
 			_this.DO = func(function() {
 				//depends on a, which may not be there yet
-				return _this.name() + parent.a.name(); 
+				return _this.name() + parent.a.name();
 			});
 		};
 
@@ -532,7 +532,7 @@ var generateProxyTests = function(useComputed) {
 
 			_this.DO = func(function() {
 				//depends on a, which may not be there yet
-				return _this.name() + parent.name() + grandparent.a.name() + grandparent.b.name() ; 
+				return _this.name() + parent.name() + grandparent.a.name() + grandparent.b.name() ;
 			});
 		};
 
@@ -574,7 +574,7 @@ var generateProxyTests = function(useComputed) {
 			var _this = this;
 
 			ko.mapping.fromJS(data, {}, _this);
-			
+
 			_this.DO = func(_this.x);
 		};
 
@@ -583,15 +583,15 @@ var generateProxyTests = function(useComputed) {
 				return new model(options.data);
 			}
 		};
-		
+
 		ko.dependentObservable.fn.myExtension = true;
-		
+
 		var mapped = ko.mapping.fromJS(obj, mapping);
-		
+
 		equal(mapped.DO.myExtension, true)
 	});
-	
-	test('Dont wrap dependent observables if already marked as deferEvaluation', function() {
+
+	test('Do not wrap dependent observables if already marked as deferEvaluation', function() {
 		var obj = {
 			x: 1
 		};
@@ -600,7 +600,7 @@ var generateProxyTests = function(useComputed) {
 			var _this = this;
 
 			ko.mapping.fromJS(data, {}, _this);
-			
+
 			_this.DO1 = func(_this.x, null, {deferEvaluation: true});
 			_this.DO2 = func({read: _this.x, deferEvaluation: true});
 			_this.DO3 = func(_this.x);
@@ -611,14 +611,14 @@ var generateProxyTests = function(useComputed) {
 				return new model(options.data);
 			}
 		};
-		
+
 		var mapped = ko.mapping.fromJS(obj, mapping);
-		
+
 		equal(mapped.DO1._wrapper, undefined);
 		equal(mapped.DO2._wrapper, undefined);
 		equal(mapped.DO3._wrapper, true);
 	});
-	
+
 	test('ko.mapping.updateViewModel should allow for the avoidance of adding an item to its parent observableArray', function() {
 		var obj = {
 			items: [
@@ -626,24 +626,24 @@ var generateProxyTests = function(useComputed) {
 				{ id: "b" }
 			]
 		}
-		
+
 		var dependencyInvocations = 0;
-		
+
 		var result = ko.mapping.fromJS(obj, {
 			"items": {
 				create: function(options) {
 					if (options.data.id == "b")
 						return options.data;
-					else 
+					else
 						return options.skip;
 				}
 			}
 		});
-		
-		
+
+
 		equal(result.items().length, 1);
 		equal(result.items()[0].id, "b");
-		
+
 	});
 
 	//unit test for updating existing arrays (e.g. first item is retained, second item is skipped and the third item gets added)?
@@ -655,25 +655,25 @@ var generateProxyTests = function(useComputed) {
 				{ id: "c" }
 			]
 		}
-		
+
 		var dependencyInvocations = 0;
-		
+
 		var result = ko.mapping.fromJS(obj, {
 			"items": {
 				create: function(options) {
 					if (options.data.id == "b")
 						return options.skip;
-					else 
+					else
 						return options.data;
 				}
 			}
 		});
-		
-		
+
+
 		equal(result.items().length, 2);
 		equal(result.items()[0].id, "a");
 		equal(result.items()[1].id, "c");
-		
+
 	});
 };
 

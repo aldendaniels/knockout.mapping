@@ -12,6 +12,7 @@
         factory(ko, ko.mapping = {});
     }
 }(function (ko, exports) {
+    var DEBUG = true;
     var mappingProperty = "__ko_mapping__";
     var realKoDependentObservable = ko.dependentObservable;
     var mappingNesting = 0;
@@ -85,7 +86,7 @@
     };
 
     exports.fromJS = function (jsObject /*, inputOptions, target*/ ) {
-        if (!arguments.length) throw new Error("When calling ko.fromJS, pass the object you want to convert.");
+        if (!arguments.length) throw new Error("When calling ko.mapping.fromJS, pass the object you want to convert.");
 
         try {
             if (!mappingNesting++) {
@@ -286,6 +287,7 @@
                     },
                     deferEvaluation: true
                 });
+                if (DEBUG) wrapped._wrapper = true;
                 wrapped.__DO = DO;
                 return wrapped;
             };
