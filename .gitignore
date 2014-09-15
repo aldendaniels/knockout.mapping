@@ -1,11 +1,1 @@
-*.suo
-*.csproj.user
-bin
-obj
-*.pdb
-_ReSharper*
-*.ReSharper.user
-*.ReSharper
-desktop.ini
-.eprj
-build/output
+node_modules
