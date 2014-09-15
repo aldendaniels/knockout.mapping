@@ -1,6 +1,6 @@
 {
   "name": "knockout.mapping",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "Object mapping plugin for KnockoutJS",
   "main": "knockout.mapping.js",
   "repository": {
