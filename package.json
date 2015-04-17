@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/derekpeterson/knockout.mapping/issues"
   },
-  "dependencies": {
+  "peerDependencies": {
     "knockout": "^3.1.0"
   }
 }
